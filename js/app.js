@@ -1,3 +1,4 @@
+// Mood Coin App Logic – One Quote Per Scan, 3 Per Day, Rotate
 const mood = "overwhelmed";
 const version = "v1";
 const QUOTE_KEY = `moodcoin_${mood}_version_${version}`;
@@ -10,14 +11,20 @@ function getDayNumber(startDate) {
 }
 
 function getTodayDateString() {
-  return new Date().toISOString().split("T")[0]; // e.g., "2025-08-01"
+  return new Date().toISOString().split("T")[0];
 }
 
-function getGradient(tone) {
+function applyGradient(tone) {
+  const body = document.body;
+  body.className = ""; // Clear previous
+
   switch (tone) {
-    case "Calm": return "linear-gradient(to bottom, #a3cce9, #f0f6fb)";
-    case "Motivational": return "linear-gradient(to bottom, #ffe9a3, #fffbe0)";
-    default: return "#ffffff";
+    case "Calm":        body.classList.add("bg-calm"); break;
+    case "Motivational":body.classList.add("bg-motivational"); break;
+    case "Soothing":    body.classList.add("bg-soothing"); break;
+    case "Reflective":  body.classList.add("bg-reflective"); break;
+    case "Hopeful":     body.classList.add("bg-hopeful"); break;
+    default:             body.classList.add("bg-neutral");
   }
 }
 
@@ -25,7 +32,7 @@ function showQuote(entry, scanIndex) {
   const container = document.getElementById('quoteBox');
   const quote = entry.quotes[scanIndex % 3];
   container.innerHTML = `<div class='quote'>${quote}</div>`;
-  document.body.style.background = getGradient(entry.tone);
+  applyGradient(entry.tone);
 }
 
 fetch(`quotes/quotes-${mood}-${version}.json`)
@@ -33,7 +40,6 @@ fetch(`quotes/quotes-${mood}-${version}.json`)
   .then(data => {
     let userData = JSON.parse(localStorage.getItem(QUOTE_KEY));
 
-    // First-time visit
     if (!userData) {
       userData = {
         startDate: new Date().toISOString(),
@@ -46,7 +52,6 @@ fetch(`quotes/quotes-${mood}-${version}.json`)
 
     const today = getTodayDateString();
 
-    // New day? Advance quote day, reset scan count
     if (userData.lastSeenDate !== today) {
       userData.dayNumber = Math.min(userData.dayNumber + 1, 365);
       userData.scanCountToday = 0;
@@ -59,7 +64,6 @@ fetch(`quotes/quotes-${mood}-${version}.json`)
     const quoteIndex = userData.scanCountToday % 3;
     showQuote(entry, quoteIndex);
 
-    // Update scan count for today
     userData.scanCountToday += 1;
     localStorage.setItem(QUOTE_KEY, JSON.stringify(userData));
   });
