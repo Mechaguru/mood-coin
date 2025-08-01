@@ -22,11 +22,28 @@ html, body {
 /* Quote Container */
 .quote-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
   padding: 1.5rem;
   width: 100%;
   max-width: 90%;
+}
+
+/* Emotion Label */
+.emotion-label {
+  font-size: 1.8rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  opacity: 1;
+  animation: fadeOutLabel 4s forwards;
+  color: #444;
+}
+
+@keyframes fadeOutLabel {
+  0% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; display: none; }
 }
 
 /* Animated Speech Bubble */
@@ -67,36 +84,59 @@ html, body {
   position: relative;
 }
 
+/* Progress Tracker */
+.progress {
+  font-size: 1.2rem;
+  color: #666;
+  margin-top: 1.2rem;
+}
+
+/* Emoji Selector */
+.emoji-picker {
+  margin-top: 1.2rem;
+  font-size: 1.6rem;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.emoji-picker input {
+  display: none;
+}
+.emoji-picker label {
+  cursor: pointer;
+  padding: 0.3rem 0.6rem;
+  border-radius: 10px;
+  background: #eee;
+  transition: background 0.3s;
+}
+.emoji-picker input:checked + label {
+  background: #cceeff;
+  font-weight: bold;
+}
+
 /* Night Mode */
 body.dark-mode .quote-box {
   background: rgba(28, 28, 40, 0.85);
   box-shadow: 0 12px 32px rgba(0,0,0,0.2);
 }
-
 body.dark-mode .quote-text {
   color: #f2f2f2;
 }
-
 body.dark-mode .quote-box::after {
   border-color: rgba(28, 28, 40, 0.85) transparent transparent transparent;
 }
+body.dark-mode .progress,
+body.dark-mode .emotion-label {
+  color: #ccc;
+}
 
 /* Mood-specific Animations */
-.mood-overwhelmed .quote-box {
-  animation: shakeIn 0.5s ease-out;
-}
-
-.mood-flat .quote-box {
-  animation: floatIn 0.5s ease-in;
-}
-
-.mood-lost .quote-box {
-  animation: fadePop 0.5s ease;
-}
-
-.mood-numb .quote-box {
-  animation: pulseIn 0.5s ease-in-out;
-}
+.mood-overwhelmed .quote-box { animation: shakeIn 0.5s ease-out; }
+.mood-flat .quote-box { animation: floatIn 0.5s ease-in; }
+.mood-lost .quote-box { animation: fadePop 0.5s ease; }
+.mood-numb .quote-box { animation: pulseIn 0.5s ease-in-out; }
+.mood-calm .quote-box { animation: easeBreathe 0.5s ease-in-out; }
 
 /* Animations */
 @keyframes shakeIn {
@@ -120,6 +160,11 @@ body.dark-mode .quote-box::after {
 @keyframes pulseIn {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.05); }
+}
+
+@keyframes easeBreathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
 }
 
 @keyframes baseFade {
