@@ -8,53 +8,50 @@
 html, body {
   height: 100%;
   width: 100%;
-  font-family: 'Helvetica Neue', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: var(--bg-gradient, linear-gradient(135deg, #eaeaea, #ffffff));
+  transition: background 1s ease-in-out;
   overflow: hidden;
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
 }
 
+/* Quote Container */
 .quote-container {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  padding: 1rem;
+  padding: 2rem;
   width: 100%;
   max-width: 90%;
 }
 
-.quote {
-  font-size: clamp(2.4rem, 7vw, 3.2rem);
-  font-weight: 700;
+/* Modern Quote Box */
+.quote-box {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(6px);
+  padding: 2rem 2.5rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  max-width: 700px;
+  width: 100%;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Quote Text */
+.quote-text {
+  font-size: clamp(2.2rem, 6vw, 3.4rem);
+  font-weight: 600;
   color: #1a1a1a;
-  text-align: center;
   line-height: 1.4;
+  text-align: center;
 }
 
-/* Calming Gradient Classes (only one used per scan) */
-.bg-calm {
-  background: linear-gradient(to bottom, #a3cce9, #f0f6fb);
-}
-
-.bg-motivational {
-  background: linear-gradient(to bottom, #ffe9a3, #fffbe0);
-}
-
-.bg-soothing {
-  background: linear-gradient(to bottom, #f8c6c6, #ffeaea);
-}
-
-.bg-reflective {
-  background: linear-gradient(to bottom, #d5d5ff, #f5f5ff);
-}
-
-.bg-hopeful {
-  background: linear-gradient(to bottom, #d2e8d2, #f3fbf3);
-}
-
-.bg-neutral {
-  background: linear-gradient(to bottom, #eaeaea, #ffffff);
+/* Optional Fade Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
