@@ -73,10 +73,14 @@ function showQuote(entry, scanIndex, dayNum) {
     quote = "Take a deep breath. You’re doing okay.";
   }
 
-  const storedEmoji = localStorage.getItem(EMOJI_KEY) || "";
-  const storedLabel = localStorage.getItem(EMOJI_LABEL_KEY) || mood.charAt(0).toUpperCase() + mood.slice(1);
+  let storedEmoji = localStorage.getItem(EMOJI_KEY) || "";
+  let storedLabel = localStorage.getItem(EMOJI_LABEL_KEY) || mood.charAt(0).toUpperCase() + mood.slice(1);
 
-  // If someone moved to a better emoji like 🧘, override the quote with a short encouragement
+  if (storedLabel === "Feeling like myself") {
+    storedEmoji = "";
+    storedLabel = mood.charAt(0).toUpperCase() + mood.slice(1);
+  }
+
   if (storedLabel === "Feeling like myself") {
     quote = encouragementMap[storedLabel] || quote;
   }
@@ -89,14 +93,22 @@ function showQuote(entry, scanIndex, dayNum) {
       <div class='quote-text'>${quote} ${storedEmoji}</div>
     </div>
     <div class='progress'>Day ${dayNum} of 365 | Quote ${scanIndex + 1} of 3</div>
-    <div class='emoji-picker'>
-      <span>Which emoji best describes how you're feeling today?</span>
-      ${Object.entries(emojiMap).map(([emoji, label], idx) => `
-        <input type='radio' name='emoji' id='emoji${idx}' value='${emoji}' ${storedEmoji === emoji ? "checked" : ""}>
-        <label for='emoji${idx}'>${emoji}<div class='emoji-label'>${label}</div></label>
-      `).join('')}
+    <div class='emoji-picker-wrapper'>
+      <span class='emoji-prompt'>Which emoji best describes how you're feeling today?</span>
+      <div class='emoji-picker'>
+        ${Object.entries(emojiMap).map(([emoji, label], idx) => `
+          <div class='emoji-bubble'>
+            <input type='radio' name='emoji' id='emoji${idx}' value='${emoji}' ${storedEmoji === emoji ? "checked" : ""}>
+            <label for='emoji${idx}'>
+              <span class='emoji-icon'>${emoji}</span>
+              <span class='emoji-label'>${label}</span>
+            </label>
+          </div>
+        `).join('')}
+      </div>
     </div>
   `;
+
   container.innerHTML = html;
   applyRandomGradient();
   playAudio();
@@ -105,8 +117,13 @@ function showQuote(entry, scanIndex, dayNum) {
     input.addEventListener("change", e => {
       const selected = e.target.value;
       const label = emojiMap[selected] || mood;
-      localStorage.setItem(EMOJI_KEY, selected);
-      localStorage.setItem(EMOJI_LABEL_KEY, label);
+      if (label !== "Feeling like myself") {
+        localStorage.setItem(EMOJI_KEY, selected);
+        localStorage.setItem(EMOJI_LABEL_KEY, label);
+      } else {
+        localStorage.removeItem(EMOJI_KEY);
+        localStorage.removeItem(EMOJI_LABEL_KEY);
+      }
       showQuote(entry, scanIndex, dayNum);
     });
   });
