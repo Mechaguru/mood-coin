@@ -11,7 +11,16 @@ const emojiMap = {
   "😵": "Overloaded",
   "🤯": "Exploding",
   "🫂": "Needs comfort",
-  "🧘": "Getting back to myself"
+  "🧘": "Feeling like myself"
+};
+
+const encouragementMap = {
+  "Feeling like myself": "Welcome back. You're doing great.",
+  "Needs comfort": "Be kind to yourself. You’re not alone.",
+  "Exploding": "Slow down. You’ve got this.",
+  "Overloaded": "One step at a time is still progress.",
+  "Melting": "It’s okay to pause. You’ll find your shape.",
+  "Stressed": "Even pressure makes diamonds."
 };
 
 function getDayNumber(startDate) {
@@ -66,6 +75,11 @@ function showQuote(entry, scanIndex, dayNum) {
 
   const storedEmoji = localStorage.getItem(EMOJI_KEY) || "";
   const storedLabel = localStorage.getItem(EMOJI_LABEL_KEY) || mood.charAt(0).toUpperCase() + mood.slice(1);
+
+  // If someone moved to a better emoji like 🧘, override the quote with a short encouragement
+  if (storedLabel === "Feeling like myself") {
+    quote = encouragementMap[storedLabel] || quote;
+  }
 
   const html = `
     <div class='emotion-label-container'>
