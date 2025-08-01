@@ -3,6 +3,16 @@ const mood = "overwhelmed";
 const version = "v1";
 const QUOTE_KEY = `moodcoin_${mood}_version_${version}`;
 const EMOJI_KEY = `moodcoin_emoji_${mood}`;
+const EMOJI_LABEL_KEY = `moodcoin_emoji_label_${mood}`;
+
+const emojiMap = {
+  "😰": "Stressed",
+  "🫠": "Melting",
+  "😵": "Overloaded",
+  "🤯": "Exploding",
+  "🫂": "Needs comfort",
+  "🧘": "Getting back to myself"
+};
 
 function getDayNumber(startDate) {
   const now = new Date();
@@ -55,10 +65,11 @@ function showQuote(entry, scanIndex, dayNum) {
   }
 
   const storedEmoji = localStorage.getItem(EMOJI_KEY) || "";
+  const storedLabel = localStorage.getItem(EMOJI_LABEL_KEY) || mood.charAt(0).toUpperCase() + mood.slice(1);
 
   const html = `
     <div class='emotion-label-container'>
-      <div class='emotion-label'>${mood.charAt(0).toUpperCase() + mood.slice(1)}</div>
+      <div class='emotion-label'>${storedLabel}</div>
     </div>
     <div class='quote-box mood-${mood}'>
       <div class='quote-text'>${quote} ${storedEmoji}</div>
@@ -66,9 +77,9 @@ function showQuote(entry, scanIndex, dayNum) {
     <div class='progress'>Day ${dayNum} of 365 | Quote ${scanIndex + 1} of 3</div>
     <div class='emoji-picker'>
       <span>Which emoji best describes how you're feeling today?</span>
-      ${["😰", "🫠", "😵", "🤯", "🫂", "🧘"].map((emoji, idx) => `
+      ${Object.entries(emojiMap).map(([emoji, label], idx) => `
         <input type='radio' name='emoji' id='emoji${idx}' value='${emoji}' ${storedEmoji === emoji ? "checked" : ""}>
-        <label for='emoji${idx}'>${emoji}</label>
+        <label for='emoji${idx}'>${emoji}<div class='emoji-label'>${label}</div></label>
       `).join('')}
     </div>
   `;
@@ -78,8 +89,11 @@ function showQuote(entry, scanIndex, dayNum) {
 
   document.querySelectorAll(".emoji-picker input").forEach(input => {
     input.addEventListener("change", e => {
-      localStorage.setItem(EMOJI_KEY, e.target.value);
-      showQuote(entry, scanIndex, dayNum); // refresh with selected emoji
+      const selected = e.target.value;
+      const label = emojiMap[selected] || mood;
+      localStorage.setItem(EMOJI_KEY, selected);
+      localStorage.setItem(EMOJI_LABEL_KEY, label);
+      showQuote(entry, scanIndex, dayNum);
     });
   });
 }
