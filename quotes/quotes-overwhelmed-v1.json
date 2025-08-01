@@ -2,241 +2,33 @@
   {
     "day": 1,
     "quotes": [
-      "You are not your thoughts.",
-      "Even the storm runs out of rain.",
-      "Today is enough. You are enough."
+      { "text": "You’re not behind. You’re on your own timeline." },
+      { "text": "Overwhelm is temporary. You’ve done hard things before." },
+      { "text": "Take a breath. You’re allowed to slow down." }
     ]
   },
   {
     "day": 2,
     "quotes": [
-      "Gentle steps still take you forward.",
-      "Pause. You\u2019re allowed to rest.",
-      "Let go of what you can\u2019t control."
+      { "text": "Progress isn’t always visible, but it’s real." },
+      { "text": "One small step forward is still forward." },
+      { "text": "You’re doing better than you think." }
     ]
   },
   {
     "day": 3,
     "quotes": [
-      "It's okay to feel overwhelmed. Take a moment.",
-      "You\u2019ve made it through 100% of your hardest days.",
-      "Breath is power. Inhale calm, exhale tension."
+      { "text": "Let go of perfect. Focus on doing what you can." },
+      { "text": "Some days, surviving is its own victory." },
+      { "text": "You’re allowed to pause without guilt." }
     ]
   },
   {
     "day": 4,
     "quotes": [
-      "You are not your thoughts.",
-      "Even the storm runs out of rain.",
-      "Today is enough. You are enough."
-    ]
-  },
-  {
-    "day": 5,
-    "quotes": [
-      "Gentle steps still take you forward.",
-      "Pause. You\u2019re allowed to rest.",
-      "Let go of what you can\u2019t control."
-    ]
-  },
-  {
-    "day": 6,
-    "quotes": [
-      "It's okay to feel overwhelmed. Take a moment.",
-      "You\u2019ve made it through 100% of your hardest days.",
-      "Breath is power. Inhale calm, exhale tension."
-    ]
-  },
-  {
-    "day": 7,
-    "quotes": [
-      "You are not your thoughts.",
-      "Even the storm runs out of rain.",
-      "Today is enough. You are enough."
-    ]
-  },
-  {
-    "day": 8,
-    "quotes": [
-      "Gentle steps still take you forward.",
-      "Pause. You\u2019re allowed to rest.",
-      "Let go of what you can\u2019t control."
-    ]
-  },
-  {
-    "day": 9,
-    "quotes": [
-      "It's okay to feel overwhelmed. Take a moment.",
-      "You\u2019ve made it through 100% of your hardest days.",
-      "Breath is power. Inhale calm, exhale tension."
-    ]
-  },
-  {
-    "day": 10,
-    "quotes": [
-      "You are not your thoughts.",
-      "Even the storm runs out of rain.",
-      "Today is enough. You are enough."
-    ]
-  },
-  {
-    "day": 11,
-    "quotes": [
-      "Gentle steps still take you forward.",
-      "Pause. You\u2019re allowed to rest.",
-      "Let go of what you can\u2019t control."
-    ]
-  },
-  {
-    "day": 12,
-    "quotes": [
-      "It's okay to feel overwhelmed. Take a moment.",
-      "You\u2019ve made it through 100% of your hardest days.",
-      "Breath is power. Inhale calm, exhale tension."
-    ]
-  },
-  {
-    "day": 13,
-    "quotes": [
-      "You are not your thoughts.",
-      "Even the storm runs out of rain.",
-      "Today is enough. You are enough."
-    ]
-  },
-  {
-    "day": 14,
-    "quotes": [
-      "Gentle steps still take you forward.",
-      "Pause. You\u2019re allowed to rest.",
-      "Let go of what you can\u2019t control."
-    ]
-  },
-  {
-    "day": 15,
-    "quotes": [
-      "It's okay to feel overwhelmed. Take a moment.",
-      "You\u2019ve made it through 100% of your hardest days.",
-      "Breath is power. Inhale calm, exhale tension."
-    ]
-  },
-  {
-    "day": 16,
-    "quotes": [
-      "You are not your thoughts.",
-      "Even the storm runs out of rain.",
-      "Today is enough. You are enough."
-    ]
-  },
-  {
-    "day": 17,
-    "quotes": [
-      "Gentle steps still take you forward.",
-      "Pause. You\u2019re allowed to rest.",
-      "Let go of what you can\u2019t control."
-    ]
-  },
-  {
-    "day": 18,
-    "quotes": [
-      "It's okay to feel overwhelmed. Take a moment.",
-      "You\u2019ve made it through 100% of your hardest days.",
-      "Breath is power. Inhale calm, exhale tension."
-    ]
-  },
-  {
-    "day": 19,
-    "quotes": [
-      "You are not your thoughts.",
-      "Even the storm runs out of rain.",
-      "Today is enough. You are enough."
-    ]
-  },
-  {
-    "day": 20,
-    "quotes": [
-      "Gentle steps still take you forward.",
-      "Pause. You\u2019re allowed to rest.",
-      "Let go of what you can\u2019t control."
-    ]
-  },
-  {
-    "day": 21,
-    "quotes": [
-      "It's okay to feel overwhelmed. Take a moment.",
-      "You\u2019ve made it through 100% of your hardest days.",
-      "Breath is power. Inhale calm, exhale tension."
-    ]
-  },
-  {
-    "day": 22,
-    "quotes": [
-      "You are not your thoughts.",
-      "Even the storm runs out of rain.",
-      "Today is enough. You are enough."
-    ]
-  },
-  {
-    "day": 23,
-    "quotes": [
-      "Gentle steps still take you forward.",
-      "Pause. You\u2019re allowed to rest.",
-      "Let go of what you can\u2019t control."
-    ]
-  },
-  {
-    "day": 24,
-    "quotes": [
-      "It's okay to feel overwhelmed. Take a moment.",
-      "You\u2019ve made it through 100% of your hardest days.",
-      "Breath is power. Inhale calm, exhale tension."
-    ]
-  },
-  {
-    "day": 25,
-    "quotes": [
-      "You are not your thoughts.",
-      "Even the storm runs out of rain.",
-      "Today is enough. You are enough."
-    ]
-  },
-  {
-    "day": 26,
-    "quotes": [
-      "Gentle steps still take you forward.",
-      "Pause. You\u2019re allowed to rest.",
-      "Let go of what you can\u2019t control."
-    ]
-  },
-  {
-    "day": 27,
-    "quotes": [
-      "It's okay to feel overwhelmed. Take a moment.",
-      "You\u2019ve made it through 100% of your hardest days.",
-      "Breath is power. Inhale calm, exhale tension."
-    ]
-  },
-  {
-    "day": 28,
-    "quotes": [
-      "You are not your thoughts.",
-      "Even the storm runs out of rain.",
-      "Today is enough. You are enough."
-    ]
-  },
-  {
-    "day": 29,
-    "quotes": [
-      "Gentle steps still take you forward.",
-      "Pause. You\u2019re allowed to rest.",
-      "Let go of what you can\u2019t control."
-    ]
-  },
-  {
-    "day": 30,
-    "quotes": [
-      "It's okay to feel overwhelmed. Take a moment.",
-      "You\u2019ve made it through 100% of your hardest days.",
-      "Breath is power. Inhale calm, exhale tension."
+      { "text": "You can’t do everything. You were never meant to." },
+      { "text": "Your energy matters. Protect it kindly." },
+      { "text": "Every deep breath resets your nervous system." }
     ]
   }
 ]
