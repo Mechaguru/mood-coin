@@ -106,30 +106,31 @@ function closePage() {
   setTimeout(() => window.history.back(), 300);
 }
 
-function fadeReplace(selector, newContent) {
+function fadeReplace(selector, newContent, duration = 500) {
   const el = document.querySelector(selector);
   if (!el) return;
+  el.style.transition = `opacity ${duration / 1000}s ease-in-out`;
   el.style.opacity = 0;
   setTimeout(() => {
     el.textContent = newContent;
     el.style.opacity = 1;
-  }, 500);
+  }, duration);
 }
 
-function showQuote(entry, scanIndex, dayNum, isTemporary = false) {
+function showQuote(entry, scanIndex, dayNum) {
   const container = document.getElementById('quoteBox');
   const storedEmoji = localStorage.getItem(EMOJI_KEY) || "";
   const storedLabel = localStorage.getItem(EMOJI_LABEL_KEY) || mood.charAt(0).toUpperCase() + mood.slice(1);
   const isSelfFeeling = storedLabel === "Feeling like myself";
 
-  let quote = "Take a deep breath. You’re doing okay.";
+  let rawQuote = "Take a deep breath. You’re doing okay.";
   if (isSelfFeeling) {
     const affirmations = encouragementMap["Feeling like myself"];
-    quote = affirmations[Math.floor(Math.random() * affirmations.length)];
+    rawQuote = affirmations[Math.floor(Math.random() * affirmations.length)];
   } else {
-    let rawQuote = entry.quotes[scanIndex % 3];
-    if (typeof rawQuote === 'object') rawQuote = rawQuote.text;
-    if (rawQuote && rawQuote.length >= 25) quote = rawQuote;
+    let quoteCandidate = entry.quotes[scanIndex % 3];
+    if (typeof quoteCandidate === 'object') quoteCandidate = quoteCandidate.text;
+    if (quoteCandidate && quoteCandidate.length >= 25) rawQuote = quoteCandidate;
   }
 
   const lastLabel = (!isSelfFeeling && storedLabel !== "") ? `Last selected: ${storedEmoji} ${storedLabel}` : "";
@@ -137,10 +138,10 @@ function showQuote(entry, scanIndex, dayNum, isTemporary = false) {
   const html = `
     <div class='close-button' onclick='closePage()'>×</div>
     <div class='emotion-label-container'>
-      <div class='emotion-label'>${storedLabel}</div>
+      <div class='emotion-label' id='emotionLabel'>${storedLabel}</div>
     </div>
     <div class='quote-box mood-${mood}'>
-      <div class='quote-text'>${quote} ${isSelfFeeling ? '' : storedEmoji}</div>
+      <div class='quote-text' id='quoteText'>${rawQuote} ${isSelfFeeling ? '' : storedEmoji}</div>
     </div>
     <div class='progress'>Day ${dayNum} of 365 | Quote ${scanIndex + 1} of 3</div>
     <div class='emoji-picker-wrapper'>
@@ -161,7 +162,8 @@ function showQuote(entry, scanIndex, dayNum, isTemporary = false) {
   applyRandomGradient();
   playAudio();
 
-  setTimeout(() => fadeReplace(".emotion-label", quote), 4000);
+  // Fade out emotion label and replace with quote
+  setTimeout(() => fadeReplace("#emotionLabel", rawQuote), 4000);
 
   document.querySelectorAll(".emoji-picker input").forEach(input => {
     input.addEventListener("change", e => {
@@ -177,20 +179,9 @@ function showQuote(entry, scanIndex, dayNum, isTemporary = false) {
 
       const encouragements = encouragementMap[label];
       const tempQuote = Array.isArray(encouragements) ? encouragements[Math.floor(Math.random() * encouragements.length)] : encouragements;
-      fadeReplace(".quote-text", tempQuote);
 
-      setTimeout(() => {
-        const entry = JSON.parse(localStorage.getItem(QUOTE_KEY));
-        const today = getTodayDateString();
-        const currentDay = entry?.dayNumber || 1;
-        const index = (entry?.scanCountToday || 1) % 3;
-        fetch(`quotes/quotes-${mood}-${version}.json`)
-          .then(res => res.json())
-          .then(data => {
-            const todayQuote = data.find(q => q.day === currentDay)?.quotes[index];
-            fadeReplace(".quote-text", todayQuote);
-          });
-      }, 5000);
+      fadeReplace("#quoteText", tempQuote, 300);
+      setTimeout(() => fadeReplace("#quoteText", rawQuote, 600), 5000);
     });
   });
 }
