@@ -1,4 +1,100 @@
-/* Wrapper for the entire emoji section */
+/* Reset & Base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background: var(--bg-gradient, linear-gradient(135deg, #eaeaea, #ffffff));
+  transition: background 1.5s ease-in-out;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+/* Quote Container */
+.quote-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 90%;
+}
+
+/* Emotion Label */
+.emotion-label-container {
+  height: 2.4rem;
+}
+
+.emotion-label {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  opacity: 1;
+  color: #444;
+  transition: opacity 0.5s ease;
+  text-align: center;
+}
+
+.emotion-label.fade-out {
+  opacity: 0;
+}
+
+/* Quote Box */
+.quote-box {
+  position: relative;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  padding: 2rem 2.5rem;
+  border-radius: 1.75rem;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+  max-width: 720px;
+  width: 100%;
+  transform-origin: bottom center;
+  animation: baseFade 0.6s ease-out;
+}
+
+.quote-box::after {
+  content: "";
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 12px 12px 0;
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.8) transparent transparent transparent;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.1));
+}
+
+/* Quote Text */
+.quote-text {
+  font-size: clamp(1.6rem, 5vw, 2.4rem);
+  max-width: 90vw;
+  padding: 0.5rem;
+  overflow-wrap: break-word;
+  text-wrap: balance;
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* Progress Tracker */
+.progress {
+  font-size: 1.1rem;
+  color: #666;
+  margin-top: 1.4rem;
+  text-align: center;
+}
+
+/* Emoji Section */
 .emoji-picker-wrapper {
   margin-top: 2rem;
   width: 100%;
@@ -7,7 +103,6 @@
   -webkit-overflow-scrolling: touch;
 }
 
-/* Prompt text */
 .emoji-prompt {
   font-size: 1.1rem;
   text-align: center;
@@ -15,7 +110,7 @@
   color: #555;
 }
 
-/* Emoji picker container: horizontal row */
+/* Horizontal Scroll */
 .emoji-picker {
   display: flex;
   flex-wrap: nowrap;
@@ -25,7 +120,7 @@
   padding-bottom: 0.5rem;
 }
 
-/* Each emoji speech bubble */
+/* Speech Bubble per Emoji */
 .emoji-bubble {
   flex: 0 0 auto;
   width: 72px;
@@ -40,12 +135,12 @@
   cursor: pointer;
 }
 
-/* Hide radio input */
+/* Hide radio inputs */
 .emoji-bubble input {
   display: none;
 }
 
-/* Label inside each bubble */
+/* Emoji Label */
 .emoji-bubble label {
   display: block;
   font-size: 1.6rem;
@@ -53,14 +148,13 @@
   color: #333;
 }
 
-/* Description text under each emoji */
 .emoji-label {
   font-size: 0.75rem;
   margin-top: 0.2rem;
   color: #555;
 }
 
-/* Highlight selected bubble */
+/* Selected Style */
 .emoji-bubble input:checked + label {
   font-weight: bold;
   color: #005fa3;
@@ -70,24 +164,92 @@
   color: #007acc;
 }
 
-/* Dark Mode support */
+/* Close Button */
+.close-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.4rem;
+  background: rgba(0,0,0,0.05);
+  border-radius: 50%;
+  padding: 0.4rem 0.7rem;
+  cursor: pointer;
+  transition: background 0.3s;
+  z-index: 999;
+}
+.close-button:hover {
+  background: rgba(0,0,0,0.2);
+}
+
+/* Night Mode */
+body.dark-mode .quote-box {
+  background: rgba(28, 28, 40, 0.85);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+}
+body.dark-mode .quote-text {
+  color: #f2f2f2;
+}
+body.dark-mode .quote-box::after {
+  border-color: rgba(28, 28, 40, 0.85) transparent transparent transparent;
+}
+body.dark-mode .progress,
+body.dark-mode .emotion-label {
+  color: #ccc;
+}
 body.dark-mode .emoji-bubble {
   background: rgba(40, 40, 60, 0.85);
   color: #f0f0f0;
 }
-
 body.dark-mode .emoji-bubble label {
   color: #f0f0f0;
 }
-
 body.dark-mode .emoji-label {
   color: #ccc;
 }
-
 body.dark-mode .emoji-bubble input:checked + label {
   color: #00cfff;
 }
-
 body.dark-mode .emoji-bubble input:checked + label .emoji-label {
   color: #aeefff;
 }
+
+/* Animations */
+@keyframes shakeIn {
+  0% { transform: translateX(-3%); opacity: 0; }
+  40% { transform: translateX(3%); opacity: 1; }
+  60% { transform: translateX(-2%); }
+  80% { transform: translateX(2%); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes floatIn {
+  0% { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadePop {
+  0% { transform: scale(0.9); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes pulseIn {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes easeBreathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+@keyframes baseFade {
+  0% { opacity: 0; transform: scale(0.97); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* Mood-specific animations */
+.mood-overwhelmed .quote-box { animation: shakeIn 0.5s ease-out; }
+.mood-flat .quote-box { animation: floatIn 0.5s ease-in; }
+.mood-lost .quote-box { animation: fadePop 0.5s ease; }
+.mood-numb .quote-box { animation: pulseIn 0.5s ease-in-out; }
+.mood-calm .quote-box { animation: easeBreathe 0.5s ease-in-out; }
