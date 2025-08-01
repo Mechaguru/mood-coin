@@ -15,7 +15,13 @@ const emojiMap = {
 };
 
 const encouragementMap = {
-  "Feeling like myself": "Welcome back. You're doing great.",
+  "Feeling like myself": [
+    "You're showing up for yourself. Keep going.",
+    "You’ve made progress — own it.",
+    "Welcome back. You’re doing great.",
+    "You’ve overcome the hardest part already.",
+    "This calm is well-earned."
+  ],
   "Needs comfort": "Be kind to yourself. You’re not alone.",
   "Exploding": "Slow down. You’ve got this.",
   "Overloaded": "One step at a time is still progress.",
@@ -65,44 +71,46 @@ function playAudio() {
   audio.play().catch(() => {});
 }
 
+function closePage() {
+  window.close();
+  setTimeout(() => window.history.back(), 300);
+}
+
 function showQuote(entry, scanIndex, dayNum) {
   const container = document.getElementById('quoteBox');
-  let quote = entry.quotes[scanIndex % 3];
-  if (typeof quote === 'object') quote = quote.text;
-  if (!quote || quote.length < 20) {
-    quote = "Take a deep breath. You’re doing okay.";
+  const storedEmoji = localStorage.getItem(EMOJI_KEY) || "";
+  const storedLabel = localStorage.getItem(EMOJI_LABEL_KEY) || mood.charAt(0).toUpperCase() + mood.slice(1);
+  const isSelfFeeling = storedLabel === "Feeling like myself";
+
+  let quote = "Take a deep breath. You’re doing okay.";
+  if (isSelfFeeling) {
+    const affirmations = encouragementMap["Feeling like myself"];
+    quote = affirmations[Math.floor(Math.random() * affirmations.length)];
+  } else {
+    let rawQuote = entry.quotes[scanIndex % 3];
+    if (typeof rawQuote === 'object') rawQuote = rawQuote.text;
+    if (rawQuote && rawQuote.length >= 25) quote = rawQuote;
   }
 
-  let storedEmoji = localStorage.getItem(EMOJI_KEY) || "";
-  let storedLabel = localStorage.getItem(EMOJI_LABEL_KEY) || mood.charAt(0).toUpperCase() + mood.slice(1);
-
-  if (storedLabel === "Feeling like myself") {
-    storedEmoji = "";
-    storedLabel = mood.charAt(0).toUpperCase() + mood.slice(1);
-  }
-
-  if (storedLabel === "Feeling like myself") {
-    quote = encouragementMap[storedLabel] || quote;
-  }
+  const lastLabel = (!isSelfFeeling && storedLabel !== "") ? `Last selected: ${storedEmoji} ${storedLabel}` : "";
 
   const html = `
+    <div class='close-button' onclick='closePage()'>×</div>
     <div class='emotion-label-container'>
       <div class='emotion-label'>${storedLabel}</div>
     </div>
     <div class='quote-box mood-${mood}'>
-      <div class='quote-text'>${quote} ${storedEmoji}</div>
+      <div class='quote-text'>${quote} ${isSelfFeeling ? '' : storedEmoji}</div>
     </div>
     <div class='progress'>Day ${dayNum} of 365 | Quote ${scanIndex + 1} of 3</div>
     <div class='emoji-picker-wrapper'>
-      <span class='emoji-prompt'>Which emoji best describes how you're feeling today?</span>
+      <div class='emoji-prompt'>Which emoji best describes how you're feeling today?</div>
+      ${lastLabel ? `<div class='emoji-last'>${lastLabel}</div>` : ''}
       <div class='emoji-picker'>
         ${Object.entries(emojiMap).map(([emoji, label], idx) => `
           <div class='emoji-bubble'>
             <input type='radio' name='emoji' id='emoji${idx}' value='${emoji}' ${storedEmoji === emoji ? "checked" : ""}>
-            <label for='emoji${idx}'>
-              <span class='emoji-icon'>${emoji}</span>
-              <span class='emoji-label'>${label}</span>
-            </label>
+            <label for='emoji${idx}'>${emoji}<div class='emoji-label'>${label}</div></label>
           </div>
         `).join('')}
       </div>
@@ -117,12 +125,12 @@ function showQuote(entry, scanIndex, dayNum) {
     input.addEventListener("change", e => {
       const selected = e.target.value;
       const label = emojiMap[selected] || mood;
-      if (label !== "Feeling like myself") {
-        localStorage.setItem(EMOJI_KEY, selected);
-        localStorage.setItem(EMOJI_LABEL_KEY, label);
-      } else {
+      if (label === "Feeling like myself") {
         localStorage.removeItem(EMOJI_KEY);
         localStorage.removeItem(EMOJI_LABEL_KEY);
+      } else {
+        localStorage.setItem(EMOJI_KEY, selected);
+        localStorage.setItem(EMOJI_LABEL_KEY, label);
       }
       showQuote(entry, scanIndex, dayNum);
     });
