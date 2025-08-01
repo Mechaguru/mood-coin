@@ -252,13 +252,21 @@ body.dark-mode .emoji-bubble input:checked + label .emoji-label {
   transition: opacity 0.8s ease-in;
 }
 
-.fade-out {
-  opacity: 0;
-  transition: opacity 0.6s ease-out;
-}
 /* Mood-specific animations */
 .mood-overwhelmed .quote-box { animation: shakeIn 0.5s ease-out; }
 .mood-flat .quote-box { animation: floatIn 0.5s ease-in; }
 .mood-lost .quote-box { animation: fadePop 0.5s ease; }
 .mood-numb .quote-box { animation: pulseIn 0.5s ease-in-out; }
 .mood-calm .quote-box { animation: easeBreathe 0.5s ease-in-out; }
+
+.fade-transition {
+  transition: opacity 0.8s ease;
+}
+
+.hidden {
+  opacity: 0;
+}
+
+.visible {
+  opacity: 1;
+}
