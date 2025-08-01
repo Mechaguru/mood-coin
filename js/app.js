@@ -199,23 +199,25 @@ function showQuote(entry, scanIndex, dayNum) {
         localStorage.setItem(EMOJI_LABEL_KEY, label);
       }
 
-      if (quoteBox) {
-quoteBox.classList.add("fade-out");
-setTimeout(() => {
-  quoteBox.innerText = encouragement;
-  quoteBox.classList.remove("fade-out");
-  quoteBox.classList.add("fade-in");
+if (quoteBox) {
+  quoteBox.classList.add("fade-transition", "hidden");
   setTimeout(() => {
-    quoteBox.classList.remove("fade-in");
-    quoteBox.classList.add("fade-out");
+    quoteBox.innerText = encouragement;
+    quoteBox.classList.remove("hidden");
+    quoteBox.classList.add("visible");
+
     setTimeout(() => {
-      quoteBox.innerText = quote;
-      quoteBox.classList.remove("fade-out");
-      quoteBox.classList.add("fade-in");
-    }, 600);
-  }, 4500);
-}, 500);
-      }
+      quoteBox.classList.remove("visible");
+      quoteBox.classList.add("hidden");
+
+      setTimeout(() => {
+        quoteBox.innerText = quote;
+        quoteBox.classList.remove("hidden");
+        quoteBox.classList.add("visible");
+      }, 600);
+    }, 4500);
+  }, 500);
+}
     });
   });
 }
