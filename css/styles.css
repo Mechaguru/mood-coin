@@ -1,184 +1,205 @@
-// Mood Coin App Logic – Overwhelmed Coin Setup
-const mood = "overwhelmed";
-const version = "v1";
-const QUOTE_KEY = `moodcoin_${mood}_version_${version}`;
-const EMOJI_KEY = `moodcoin_emoji_${mood}`;
-const EMOJI_LABEL_KEY = `moodcoin_emoji_label_${mood}`;
-
-const emojiMap = {
-  "😰": "Stressed",
-  "🫠": "Melting",
-  "😵": "Overloaded",
-  "🤯": "Exploding",
-  "🫂": "Needs comfort",
-  "🧘": "Feeling like myself"
-};
-
-const encouragementMap = {
-  "Feeling like myself": [
-    "You're showing up for yourself. Keep going.",
-    "You’ve made progress — own it.",
-    "Welcome back. You’re doing great.",
-    "You’ve overcome the hardest part already.",
-    "This calm is well-earned."
-  ],
-  "Needs comfort": [
-    "Be kind to yourself. You’re not alone.",
-    "It’s okay to lean on others sometimes.",
-    "Compassion starts with you."
-  ],
-  "Exploding": [
-    "Slow down. You’ve got this.",
-    "Step back, breathe deep."
-  ],
-  "Overloaded": [
-    "One step at a time is still progress.",
-    "You’re doing enough, even when it feels like chaos."
-  ],
-  "Melting": [
-    "It’s okay to pause. You’ll find your shape.",
-    "Take a moment to cool down — you're allowed."
-  ],
-  "Stressed": [
-    "Even pressure makes diamonds.",
-    "You’ve overcome stress before. You will again.",
-    "Your effort is seen and valued."
-  ]
-};
-
-function getDayNumber(startDate) {
-  const now = new Date();
-  const start = new Date(startDate);
-  const diff = Math.floor((now - start) / (1000 * 60 * 60 * 24));
-  return Math.min(diff + 1, 365);
+/* Reset & Base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-function getTodayDateString() {
-  return new Date().toISOString().split("T")[0];
+html, body {
+  height: 100%;
+  width: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--bg-gradient, linear-gradient(135deg, #eaeaea, #ffffff));
+  transition: background 1.5s ease-in-out;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  overflow-x: hidden;
+  padding: 1rem;
 }
 
-function applyRandomGradient() {
-  const body = document.body;
-  body.className = "animated-bg";
-  const hour = new Date().getHours();
-  const isNight = hour >= 22 || hour < 6;
-
-  const gradients = [
-    "linear-gradient(135deg, #a3cce9, #f0f6fb)",
-    "linear-gradient(135deg, #ffe9a3, #fffbe0)",
-    "linear-gradient(135deg, #f8c6c6, #ffeaea)",
-    "linear-gradient(135deg, #d5d5ff, #f5f5ff)",
-    "linear-gradient(135deg, #d2e8d2, #f3fbf3)"
-  ];
-
-  const nightGradient = "linear-gradient(135deg, #1e1e2f, #3a3a5a)";
-  const gradient = isNight ? nightGradient : gradients[Math.floor(Math.random() * gradients.length)];
-
-  if (isNight) {
-    body.classList.add("dark-mode");
-  } else {
-    body.classList.remove("dark-mode");
-  }
-  body.style.setProperty('--bg-gradient', gradient);
+/* Quote Container */
+.quote-container {
+  width: 100%;
+  max-width: 768px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-function playAudio() {
-  const audio = new Audio(`audio/${mood}.mp3`);
-  audio.volume = 0.4;
-  audio.play().catch(() => {});
+/* Close Button */
+.close-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 2rem;
+  color: #666;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  padding: 0.25rem 0.6rem;
+  z-index: 10;
 }
 
-function closePage() {
-  window.close();
-  setTimeout(() => window.history.back(), 300);
+/* Emotion Label */
+.emotion-label-container {
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-function showQuote(entry, scanIndex, dayNum) {
-  const container = document.getElementById('quoteBox');
-  const storedEmoji = localStorage.getItem(EMOJI_KEY) || "";
-  const storedLabel = localStorage.getItem(EMOJI_LABEL_KEY) || mood.charAt(0).toUpperCase() + mood.slice(1);
-  const isSelfFeeling = storedLabel === "Feeling like myself";
-
-  let quote = "Take a deep breath. You’re doing okay.";
-  if (isSelfFeeling) {
-    const affirmations = encouragementMap["Feeling like myself"];
-    quote = affirmations[Math.floor(Math.random() * affirmations.length)];
-  } else {
-    let rawQuote = entry.quotes[scanIndex % 3];
-    if (typeof rawQuote === 'object') rawQuote = rawQuote.text;
-    if (rawQuote && rawQuote.length >= 25) quote = rawQuote;
-  }
-
-  const lastLabel = (!isSelfFeeling && storedLabel !== "") ? `Last selected: ${storedEmoji} ${storedLabel}` : "";
-
-  const html = `
-    <div class='close-button' onclick='closePage()'>×</div>
-    <div class='emotion-label-container'>
-      <div class='emotion-label'>${storedLabel}</div>
-    </div>
-    <div class='quote-box mood-${mood}'>
-      <div class='quote-text'>${quote} ${isSelfFeeling ? '' : storedEmoji}</div>
-    </div>
-    <div class='progress'>Day ${dayNum} of 365 | Quote ${scanIndex + 1} of 3</div>
-    <div class='emoji-picker-wrapper'>
-      <div class='emoji-prompt'>Which emoji best describes how you're feeling today?</div>
-      ${lastLabel ? `<div class='emoji-last'>${lastLabel}</div>` : ''}
-      <div class='emoji-picker'>
-        ${Object.entries(emojiMap).map(([emoji, label], idx) => `
-          <div class='emoji-bubble'>
-            <input type='radio' name='emoji' id='emoji${idx}' value='${emoji}' ${storedEmoji === emoji ? "checked" : ""}>
-            <label for='emoji${idx}'>${emoji}<div class='emoji-label'>${label}</div></label>
-          </div>
-        `).join('')}
-      </div>
-    </div>
-  `;
-
-  container.innerHTML = html;
-  applyRandomGradient();
-  playAudio();
-
-  document.querySelectorAll(".emoji-picker input").forEach(input => {
-    input.addEventListener("change", e => {
-      const selected = e.target.value;
-      const label = emojiMap[selected] || mood;
-      if (label === "Feeling like myself") {
-        localStorage.removeItem(EMOJI_KEY);
-        localStorage.removeItem(EMOJI_LABEL_KEY);
-      } else {
-        localStorage.setItem(EMOJI_KEY, selected);
-        localStorage.setItem(EMOJI_LABEL_KEY, label);
-      }
-      showQuote(entry, scanIndex, dayNum);
-    });
-  });
+.emotion-label {
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: #444;
+  animation: fadeOutLabel 4s forwards;
 }
 
-fetch(`quotes/quotes-${mood}-${version}.json`)
-  .then(res => res.json())
-  .then(data => {
-    let userData = JSON.parse(localStorage.getItem(QUOTE_KEY));
-    if (!userData) {
-      userData = {
-        startDate: new Date().toISOString(),
-        version,
-        dayNumber: 1,
-        lastSeenDate: getTodayDateString(),
-        scanCountToday: 0
-      };
-    }
+@keyframes fadeOutLabel {
+  0%, 70% { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; }
+}
 
-    const today = getTodayDateString();
-    if (userData.lastSeenDate !== today) {
-      userData.dayNumber = Math.min(userData.dayNumber + 1, 365);
-      userData.scanCountToday = 0;
-      userData.lastSeenDate = today;
-    }
+/* Quote Box */
+.quote-box {
+  position: relative;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  border-radius: 1.5rem;
+  padding: 2rem 2.5rem;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+  margin-top: 1rem;
+  animation: baseFade 0.6s ease-out;
+  width: 100%;
+  max-width: 90vw;
+}
 
-    const entry = data.find(q => q.day === userData.dayNumber);
-    if (!entry) return;
-    const quoteIndex = userData.scanCountToday % 3;
-    showQuote(entry, quoteIndex, userData.dayNumber);
-    userData.scanCountToday += 1;
-    localStorage.setItem(QUOTE_KEY, JSON.stringify(userData));
-  });
+.quote-box::after {
+  content: "";
+  position: absolute;
+  bottom: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 10px 10px 0;
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.8) transparent transparent transparent;
+}
+
+/* Quote Text */
+.quote-text {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  color: #222;
+  text-align: center;
+  line-height: 1.4;
+  text-wrap: balance;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Progress */
+.progress {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  color: #666;
+}
+
+/* Emoji Section */
+.emoji-picker-wrapper {
+  margin-top: 1.5rem;
+  width: 100%;
+  text-align: center;
+}
+
+.emoji-prompt {
+  font-size: 1.3rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.emoji-last {
+  font-size: 0.95rem;
+  color: #444;
+  margin-bottom: 0.75rem;
+  opacity: 0.85;
+}
+
+/* Emoji Row */
+.emoji-picker {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding: 0.5rem 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Emoji Bubble */
+.emoji-bubble {
+  flex: 1;
+  min-width: 5.2rem;
+  background: rgba(255,255,255,0.75);
+  border-radius: 1rem;
+  padding: 0.4rem 0.2rem;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+.emoji-bubble input {
+  display: none;
+}
+
+.emoji-bubble label {
+  display: block;
+  font-size: 1.6rem;
+  cursor: pointer;
+  color: #222;
+}
+
+.emoji-label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-top: 0.2rem;
+  color: #555;
+}
+
+.emoji-bubble input:checked + label,
+.emoji-bubble input:checked + label .emoji-label {
+  color: #007aff;
+  font-weight: 600;
+}
+
+/* Dark Mode */
+body.dark-mode .quote-box {
+  background: rgba(28, 28, 40, 0.85);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+}
+body.dark-mode .quote-text,
+body.dark-mode .emoji-prompt,
+body.dark-mode .emoji-last,
+body.dark-mode .emoji-label,
+body.dark-mode .emotion-label {
+  color: #f2f2f2;
+}
+body.dark-mode .quote-box::after {
+  border-color: rgba(28, 28, 40, 0.85) transparent transparent transparent;
+}
+
+/* Animations */
+@keyframes baseFade {
+  0% { opacity: 0; transform: scale(0.97); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.mood-overwhelmed .quote-box { animation: shakeIn 0.5s ease-out; }
+.mood-flat .quote-box { animation: floatIn 0.5s ease-in; }
+.mood-lost .quote-box { animation: fadePop 0.5s ease; }
+.mood-numb .quote-box { animation: pulseIn 0.5s ease-in-out; }
+.mood-calm .quote-box { animation: easeBreathe 0.5s ease-in-out; }
+
+@keyframes shakeIn {
+  0% { transform: translateX(-3%); opacity: 0; }
+  40%
