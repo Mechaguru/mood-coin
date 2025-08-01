@@ -97,8 +97,10 @@ function getTodayDateString() {
 
 function applyRandomGradient() {
   const body = document.body;
+  body.className = "animated-bg";
   const hour = new Date().getHours();
   const isNight = hour >= 22 || hour < 6;
+
   const gradients = [
     "linear-gradient(135deg, #a3cce9, #f0f6fb)",
     "linear-gradient(135deg, #ffe9a3, #fffbe0)",
@@ -106,15 +108,16 @@ function applyRandomGradient() {
     "linear-gradient(135deg, #d5d5ff, #f5f5ff)",
     "linear-gradient(135deg, #d2e8d2, #f3fbf3)"
   ];
+
   const nightGradient = "linear-gradient(135deg, #1e1e2f, #3a3a5a)";
   const gradient = isNight ? nightGradient : gradients[Math.floor(Math.random() * gradients.length)];
 
-  body.style.setProperty('--bg-gradient', gradient);
   if (isNight) {
     body.classList.add("dark-mode");
   } else {
     body.classList.remove("dark-mode");
   }
+  body.style.setProperty('--bg-gradient', gradient);
 }
 
 function playAudio() {
