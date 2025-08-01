@@ -24,38 +24,63 @@ const encouragementMap = {
   ],
   "Needs comfort": [
     "Be kind to yourself. You’re not alone.",
-    "You deserve the same love you give others.",
-    "Take it slow — you're safe here.",
-    "Let yourself feel. It's part of healing.",
-    "Small steps forward still matter."
+    "You’re held, even when it feels like you’re not.",
+    "Gentleness is strength in disguise.",
+    "You're not invisible. You matter.",
+    "Let someone in — you're worth the care.",
+    "This weight will ease in time.",
+    "You’ve made it this far. Keep going.",
+    "The world is better with you in it.",
+    "Take a break, not a breakdown.",
+    "Being here is enough."
   ],
   "Exploding": [
     "Slow down. You’ve got this.",
-    "Not everything needs fixing right now.",
-    "Step back and breathe.",
-    "One thing at a time is enough.",
-    "You’re not broken — just overloaded."
+    "You can pause and still make progress.",
+    "Even chaos can lead to clarity.",
+    "Let it out, then let it pass.",
+    "Storms don’t last forever.",
+    "You’re not broken. You’re overloaded.",
+    "It’s okay to step back.",
+    "You’re still in control.",
+    "This doesn’t define you.",
+    "Powerful minds need room to breathe."
   ],
   "Overloaded": [
     "One step at a time is still progress.",
-    "You’re doing more than you know.",
-    "Pause. Reset. Continue.",
-    "Let go of perfect — aim for done.",
-    "No one expects you to carry it all."
+    "You’re allowed to log off.",
+    "You can’t do it all — and that’s okay.",
+    "Breathe. Then just do the next thing.",
+    "You’re not weak for feeling this.",
+    "Slow progress is still progress.",
+    "Choose rest, not burnout.",
+    "Clarity comes after pause.",
+    "You’re enough, even without the output.",
+    "There’s power in slowing down."
   ],
   "Melting": [
     "It’s okay to pause. You’ll find your shape.",
-    "You don’t have to hold it all together.",
-    "Let things soften — including you.",
-    "You’re not disappearing. Just adjusting.",
-    "This isn’t the end — just a dip."
+    "Dissolving doesn’t mean disappearing.",
+    "You’re not falling apart — you’re softening.",
+    "You’ll re-form stronger.",
+    "Feelings fade. Strength stays.",
+    "Every phase passes.",
+    "This is temporary.",
+    "Let the moment melt — not you.",
+    "The sun is coming. Keep still.",
+    "You’re allowed to not hold it all together."
   ],
   "Stressed": [
     "Even pressure makes diamonds.",
-    "Stress is a signal — not your identity.",
-    "You're allowed to rest.",
-    "It’s okay to not be okay.",
-    "Progress, not perfection."
+    "Stress is a signal, not a sentence.",
+    "You can exhale. It's safe now.",
+    "You’ve done hard things before.",
+    "Not everything must be perfect.",
+    "You’re capable — even when tense.",
+    "Tension passes. Strength stays.",
+    "You’re not alone in this.",
+    "Pause. Re-centre. Begin again.",
+    "Stress means you care. Just don’t carry it all."
   ]
 };
 
@@ -106,47 +131,41 @@ function closePage() {
   setTimeout(() => window.history.back(), 300);
 }
 
-function fadeReplace(selector, newContent, duration = 500) {
-  const el = document.querySelector(selector);
-  if (!el) return;
-  el.style.transition = `opacity ${duration / 1000}s ease-in-out`;
-  el.style.opacity = 0;
+function fadeReplaceText(element, newText, callback) {
+  element.classList.add("fade-out");
   setTimeout(() => {
-    el.innerText = newContent;
-    el.style.opacity = 1;
-  }, duration);
+    element.innerText = newText;
+    element.classList.remove("fade-out");
+    element.classList.add("fade-in");
+    setTimeout(() => {
+      element.classList.remove("fade-in");
+      if (callback) callback();
+    }, 400);
+  }, 500);
 }
 
 function showQuote(entry, scanIndex, dayNum) {
   const container = document.getElementById('quoteBox');
   const storedEmoji = localStorage.getItem(EMOJI_KEY) || "";
-  const storedLabel = localStorage.getItem(EMOJI_LABEL_KEY) || mood.charAt(0).toUpperCase() + mood.slice(1);
-  const isSelfFeeling = storedLabel === "Feeling like myself";
+  const isSelfFeeling = localStorage.getItem(EMOJI_LABEL_KEY) === "Feeling like myself";
 
-  let quoteText = "Take a deep breath. You’re doing okay.";
+  let quote = entry.quotes[scanIndex % 3]?.text || "Take a deep breath. You’re doing okay.";
   if (isSelfFeeling) {
     const affirmations = encouragementMap["Feeling like myself"];
-    quoteText = affirmations[Math.floor(Math.random() * affirmations.length)];
-  } else {
-    let rawQuote = entry.quotes[scanIndex % 3];
-    if (typeof rawQuote === 'object') rawQuote = rawQuote.text;
-    if (rawQuote && rawQuote.length >= 25) quoteText = rawQuote;
+    quote = affirmations[Math.floor(Math.random() * affirmations.length)];
   }
-
-  const lastLabel = (!isSelfFeeling && storedLabel !== "") ? `Last selected: ${storedEmoji} ${storedLabel}` : "";
 
   const html = `
     <div class='close-button' onclick='closePage()'>×</div>
     <div class='emotion-label-container'>
-      <div class='emotion-label' id='emotionLabel'>${storedLabel}</div>
+      <div class='emotion-label'>Overwhelmed</div>
     </div>
     <div class='quote-box mood-${mood}'>
-      <div class='quote-text' id='quoteText'>${quoteText}</div>
+      <div class='quote-text'>${quote}</div>
     </div>
     <div class='progress'>Day ${dayNum} of 365 | Quote ${scanIndex + 1} of 3</div>
     <div class='emoji-picker-wrapper'>
       <div class='emoji-prompt'>Which emoji best describes how you're feeling today?</div>
-      ${lastLabel ? `<div class='emoji-last'>${lastLabel}</div>` : ''}
       <div class='emoji-picker'>
         ${Object.entries(emojiMap).map(([emoji, label], idx) => `
           <div class='emoji-bubble'>
@@ -162,15 +181,17 @@ function showQuote(entry, scanIndex, dayNum) {
   applyRandomGradient();
   playAudio();
 
-  // Delay quote replacement until fade ends
-  setTimeout(() => fadeReplace("#emotionLabel", "“Quote of the Day”", 500), 4000);
+  const labelEl = document.querySelector(".emotion-label");
+  if (labelEl) {
+    setTimeout(() => {
+      fadeReplaceText(labelEl, "Quote of the Day");
+    }, 3200);
+  }
 
   document.querySelectorAll(".emoji-picker input").forEach(input => {
     input.addEventListener("change", e => {
       const selected = e.target.value;
       const label = emojiMap[selected] || mood;
-      const quoteTextElement = document.getElementById("quoteText");
-      if (!quoteTextElement) return;
 
       if (label === "Feeling like myself") {
         localStorage.removeItem(EMOJI_KEY);
@@ -180,13 +201,17 @@ function showQuote(entry, scanIndex, dayNum) {
         localStorage.setItem(EMOJI_LABEL_KEY, label);
       }
 
-      const encouragements = encouragementMap[label];
-      const tempQuote = Array.isArray(encouragements)
-        ? encouragements[Math.floor(Math.random() * encouragements.length)]
-        : encouragements;
-
-      fadeReplace("#quoteText", tempQuote, 300);
-      setTimeout(() => fadeReplace("#quoteText", quoteText, 600), 4500);
+      const encouragements = encouragementMap[label] || [];
+      if (encouragements.length) {
+        const quoteEl = document.querySelector(".quote-text");
+        if (quoteEl) {
+          fadeReplaceText(quoteEl, encouragements[Math.floor(Math.random() * encouragements.length)], () => {
+            setTimeout(() => {
+              fadeReplaceText(quoteEl, quote);
+            }, 4000);
+          });
+        }
+      }
     });
   });
 }
