@@ -12,9 +12,9 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: var(--bg-gradient, linear-gradient(135deg, #eaeaea, #ffffff));
-  transition: background 1s ease-in-out;
   overflow: hidden;
+  background: var(--bg-gradient, linear-gradient(135deg, #eaeaea, #ffffff));
+  transition: background 1.5s ease-in-out;
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
 }
@@ -24,33 +24,45 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 2rem;
+  padding: 1.5rem;
   width: 100%;
   max-width: 90%;
 }
 
 /* Modern Quote Box */
 .quote-box {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(6px);
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(8px);
   padding: 2rem 2.5rem;
-  border-radius: 1.5rem;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-  max-width: 700px;
+  border-radius: 1.75rem;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+  max-width: 720px;
   width: 100%;
   animation: fadeIn 0.5s ease-in-out;
 }
 
 /* Quote Text */
 .quote-text {
-  font-size: clamp(2.2rem, 6vw, 3.4rem);
+  font-size: clamp(2.4rem, 6vw, 3.4rem);
   font-weight: 600;
   color: #1a1a1a;
-  line-height: 1.4;
+  line-height: 1.45;
   text-align: center;
+  word-wrap: break-word;
 }
 
-/* Optional Fade Animation */
+/* Night Mode */
+body.dark-mode .quote-box {
+  background: rgba(28, 28, 40, 0.75);
+  color: #ffffff;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+}
+
+body.dark-mode .quote-text {
+  color: #f2f2f2;
+}
+
+/* Entry Fade */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(15px); }
   to   { opacity: 1; transform: translateY(0); }
