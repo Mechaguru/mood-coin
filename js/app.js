@@ -200,18 +200,21 @@ function showQuote(entry, scanIndex, dayNum) {
       }
 
       if (quoteBox) {
-        quoteBox.style.opacity = 0;
-        setTimeout(() => {
-          quoteBox.innerText = encouragement;
-          quoteBox.style.opacity = 1;
-          setTimeout(() => {
-            quoteBox.style.opacity = 0;
-            setTimeout(() => {
-              quoteBox.innerText = quote;
-              quoteBox.style.opacity = 1;
-            }, 500);
-          }, 4500);
-        }, 500);
+quoteBox.classList.add("fade-out");
+setTimeout(() => {
+  quoteBox.innerText = encouragement;
+  quoteBox.classList.remove("fade-out");
+  quoteBox.classList.add("fade-in");
+  setTimeout(() => {
+    quoteBox.classList.remove("fade-in");
+    quoteBox.classList.add("fade-out");
+    setTimeout(() => {
+      quoteBox.innerText = quote;
+      quoteBox.classList.remove("fade-out");
+      quoteBox.classList.add("fade-in");
+    }, 600);
+  }, 4500);
+}, 500);
       }
     });
   });
