@@ -14,25 +14,39 @@ function getTodayDateString() {
   return new Date().toISOString().split("T")[0];
 }
 
-function applyGradient(tone) {
+function applyAnimatedGradient(tone) {
   const body = document.body;
-  body.className = ""; // Clear previous
+  body.className = "animated-bg"; // base class for animation
 
+  let gradient;
   switch (tone) {
-    case "Calm":        body.classList.add("bg-calm"); break;
-    case "Motivational":body.classList.add("bg-motivational"); break;
-    case "Soothing":    body.classList.add("bg-soothing"); break;
-    case "Reflective":  body.classList.add("bg-reflective"); break;
-    case "Hopeful":     body.classList.add("bg-hopeful"); break;
-    default:             body.classList.add("bg-neutral");
+    case "Calm":
+      gradient = "linear-gradient(135deg, #a3cce9, #f0f6fb)";
+      break;
+    case "Motivational":
+      gradient = "linear-gradient(135deg, #ffe9a3, #fffbe0)";
+      break;
+    case "Soothing":
+      gradient = "linear-gradient(135deg, #f8c6c6, #ffeaea)";
+      break;
+    case "Reflective":
+      gradient = "linear-gradient(135deg, #d5d5ff, #f5f5ff)";
+      break;
+    case "Hopeful":
+      gradient = "linear-gradient(135deg, #d2e8d2, #f3fbf3)";
+      break;
+    default:
+      gradient = "linear-gradient(135deg, #eaeaea, #ffffff)";
   }
+
+  body.style.setProperty('--bg-gradient', gradient);
 }
 
 function showQuote(entry, scanIndex) {
   const container = document.getElementById('quoteBox');
   const quote = entry.quotes[scanIndex % 3];
-  container.innerHTML = `<div class='quote'>${quote}</div>`;
-  applyGradient(entry.tone);
+  container.innerHTML = `<div class='quote-box'><div class='quote-text'>${quote}</div></div>`;
+  applyAnimatedGradient(entry.tone);
 }
 
 fetch(`quotes/quotes-${mood}-${version}.json`)
