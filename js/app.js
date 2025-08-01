@@ -14,26 +14,30 @@ function getTodayDateString() {
   return new Date().toISOString().split("T")[0];
 }
 
-function applyAnimatedGradient(tone) {
+function applyRandomGradient() {
   const body = document.body;
-  body.className = "animated-bg"; // base class
+  body.className = "animated-bg";
 
   const hour = new Date().getHours();
   const isNight = hour >= 22 || hour < 6;
 
-  let gradient;
+  const gradients = [
+    "linear-gradient(135deg, #a3cce9, #f0f6fb)", // Calm Blue
+    "linear-gradient(135deg, #ffe9a3, #fffbe0)", // Warm Yellow
+    "linear-gradient(135deg, #f8c6c6, #ffeaea)", // Soft Pink
+    "linear-gradient(135deg, #d5d5ff, #f5f5ff)", // Cool Lilac
+    "linear-gradient(135deg, #d2e8d2, #f3fbf3)"  // Light Green
+  ];
+
+  const nightGradient = "linear-gradient(135deg, #1e1e2f, #3a3a5a)";
+
+  const gradient = isNight
+    ? nightGradient
+    : gradients[Math.floor(Math.random() * gradients.length)];
+
   if (isNight) {
-    gradient = "linear-gradient(135deg, #1e1e2f, #3a3a5a)";
     body.classList.add("dark-mode");
   } else {
-    switch (tone) {
-      case "Calm": gradient = "linear-gradient(135deg, #a3cce9, #f0f6fb)"; break;
-      case "Motivational": gradient = "linear-gradient(135deg, #ffe9a3, #fffbe0)"; break;
-      case "Soothing": gradient = "linear-gradient(135deg, #f8c6c6, #ffeaea)"; break;
-      case "Reflective": gradient = "linear-gradient(135deg, #d5d5ff, #f5f5ff)"; break;
-      case "Hopeful": gradient = "linear-gradient(135deg, #d2e8d2, #f3fbf3)"; break;
-      default: gradient = "linear-gradient(135deg, #eaeaea, #ffffff)";
-    }
     body.classList.remove("dark-mode");
   }
 
@@ -43,10 +47,13 @@ function applyAnimatedGradient(tone) {
 function showQuote(entry, scanIndex) {
   const container = document.getElementById('quoteBox');
   let quote = entry.quotes[scanIndex % 3];
-  if (quote.length < 20) quote = "Take a deep breath. You’re doing okay.";
+  if (typeof quote === 'object') quote = quote.text;
+  if (!quote || quote.length < 20) {
+    quote = "Take a deep breath. You’re doing okay.";
+  }
 
   container.innerHTML = `<div class='quote-box'><div class='quote-text'>${quote}</div></div>`;
-  applyAnimatedGradient(entry.tone);
+  applyRandomGradient();
 }
 
 fetch(`quotes/quotes-${mood}-${version}.json`)
