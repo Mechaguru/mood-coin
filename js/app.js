@@ -57,14 +57,16 @@ function showQuote(entry, scanIndex, dayNum) {
   const storedEmoji = localStorage.getItem(EMOJI_KEY) || "";
 
   const html = `
-    <div class='emotion-label'>${mood.charAt(0).toUpperCase() + mood.slice(1)}</div>
+    <div class='emotion-label-container'>
+      <div class='emotion-label'>${mood.charAt(0).toUpperCase() + mood.slice(1)}</div>
+    </div>
     <div class='quote-box mood-${mood}'>
       <div class='quote-text'>${quote} ${storedEmoji}</div>
     </div>
     <div class='progress'>Day ${dayNum} of 365 | Quote ${scanIndex + 1} of 3</div>
     <div class='emoji-picker'>
-      <span>Select your vibe:</span>
-      ${["😊", "😌", "🌿", "💙", "🫂"].map((emoji, idx) => `
+      <span>Which emoji best describes how you're feeling today?</span>
+      ${["😰", "🫠", "😵", "🤯", "🫂", "🧘"].map((emoji, idx) => `
         <input type='radio' name='emoji' id='emoji${idx}' value='${emoji}' ${storedEmoji === emoji ? "checked" : ""}>
         <label for='emoji${idx}'>${emoji}</label>
       `).join('')}
