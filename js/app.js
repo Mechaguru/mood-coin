@@ -16,27 +16,25 @@ function getTodayDateString() {
 
 function applyAnimatedGradient(tone) {
   const body = document.body;
-  body.className = "animated-bg"; // base class for animation
+  body.className = "animated-bg"; // base class
+
+  const hour = new Date().getHours();
+  const isNight = hour >= 22 || hour < 6;
 
   let gradient;
-  switch (tone) {
-    case "Calm":
-      gradient = "linear-gradient(135deg, #a3cce9, #f0f6fb)";
-      break;
-    case "Motivational":
-      gradient = "linear-gradient(135deg, #ffe9a3, #fffbe0)";
-      break;
-    case "Soothing":
-      gradient = "linear-gradient(135deg, #f8c6c6, #ffeaea)";
-      break;
-    case "Reflective":
-      gradient = "linear-gradient(135deg, #d5d5ff, #f5f5ff)";
-      break;
-    case "Hopeful":
-      gradient = "linear-gradient(135deg, #d2e8d2, #f3fbf3)";
-      break;
-    default:
-      gradient = "linear-gradient(135deg, #eaeaea, #ffffff)";
+  if (isNight) {
+    gradient = "linear-gradient(135deg, #1e1e2f, #3a3a5a)";
+    body.classList.add("dark-mode");
+  } else {
+    switch (tone) {
+      case "Calm": gradient = "linear-gradient(135deg, #a3cce9, #f0f6fb)"; break;
+      case "Motivational": gradient = "linear-gradient(135deg, #ffe9a3, #fffbe0)"; break;
+      case "Soothing": gradient = "linear-gradient(135deg, #f8c6c6, #ffeaea)"; break;
+      case "Reflective": gradient = "linear-gradient(135deg, #d5d5ff, #f5f5ff)"; break;
+      case "Hopeful": gradient = "linear-gradient(135deg, #d2e8d2, #f3fbf3)"; break;
+      default: gradient = "linear-gradient(135deg, #eaeaea, #ffffff)";
+    }
+    body.classList.remove("dark-mode");
   }
 
   body.style.setProperty('--bg-gradient', gradient);
@@ -44,7 +42,9 @@ function applyAnimatedGradient(tone) {
 
 function showQuote(entry, scanIndex) {
   const container = document.getElementById('quoteBox');
-  const quote = entry.quotes[scanIndex % 3];
+  let quote = entry.quotes[scanIndex % 3];
+  if (quote.length < 20) quote = "Take a deep breath. You’re doing okay.";
+
   container.innerHTML = `<div class='quote-box'><div class='quote-text'>${quote}</div></div>`;
   applyAnimatedGradient(entry.tone);
 }
