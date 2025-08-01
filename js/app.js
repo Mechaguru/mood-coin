@@ -1,5 +1,5 @@
 // Mood Coin App Logic – One Quote Per Scan, 3 Per Day, Rotate
-const mood = "overwhelmed";
+const mood = "overwhelmed"; // set this per HTML page
 const version = "v1";
 const QUOTE_KEY = `moodcoin_${mood}_version_${version}`;
 
@@ -30,7 +30,6 @@ function applyRandomGradient() {
   ];
 
   const nightGradient = "linear-gradient(135deg, #1e1e2f, #3a3a5a)";
-
   const gradient = isNight
     ? nightGradient
     : gradients[Math.floor(Math.random() * gradients.length)];
@@ -52,7 +51,8 @@ function showQuote(entry, scanIndex) {
     quote = "Take a deep breath. You’re doing okay.";
   }
 
-  container.innerHTML = `<div class='quote-box'><div class='quote-text'>${quote}</div></div>`;
+  // Inject the mood class here to trigger mood-specific animations
+  container.innerHTML = `<div class='quote-box mood-${mood}'><div class='quote-text'>${quote}</div></div>`;
   applyRandomGradient();
 }
 
