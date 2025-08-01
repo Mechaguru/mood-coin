@@ -22,11 +22,28 @@ const encouragementMap = {
     "You’ve overcome the hardest part already.",
     "This calm is well-earned."
   ],
-  "Needs comfort": "Be kind to yourself. You’re not alone.",
-  "Exploding": "Slow down. You’ve got this.",
-  "Overloaded": "One step at a time is still progress.",
-  "Melting": "It’s okay to pause. You’ll find your shape.",
-  "Stressed": "Even pressure makes diamonds."
+  "Needs comfort": [
+    "Be kind to yourself. You’re not alone.",
+    "It’s okay to lean on others sometimes.",
+    "Compassion starts with you."
+  ],
+  "Exploding": [
+    "Slow down. You’ve got this.",
+    "Step back, breathe deep."
+  ],
+  "Overloaded": [
+    "One step at a time is still progress.",
+    "You’re doing enough, even when it feels like chaos."
+  ],
+  "Melting": [
+    "It’s okay to pause. You’ll find your shape.",
+    "Take a moment to cool down — you're allowed."
+  ],
+  "Stressed": [
+    "Even pressure makes diamonds.",
+    "You’ve overcome stress before. You will again.",
+    "Your effort is seen and valued."
+  ]
 };
 
 function getDayNumber(startDate) {
